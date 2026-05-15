@@ -411,6 +411,52 @@ Updated `.cursor/skills/grill-me/SKILL.md` — each question now presents 4 choi
 
 ### Date
 
+May 15, 2026
+
+### AI Tool Used
+
+Claude Code
+
+### What I Asked AI
+
+1. Start building Marmaladev — use grill-me to ask questions about the design.
+2. Push the project to GitHub at `https://github.com/NRni/Ross_Ni_Marmaladev`.
+3. Help with GitHub OAuth authentication.
+
+### Why I Asked
+
+1. Ready to start building, wanted structured decision-making.
+2. Version control and sharing the repo.
+3. Couldn't authenticate with `gh` CLI — needed a workaround.
+
+### What AI Gave Me
+
+1. **Grill-me questions:** Asked about UI approach (chose Streamlit) and map library (chose streamlit-folium with Google Maps as fallback).
+2. **Build plan:** 6-step plan — profile model → Streamlit CRUD → map → links → nearby matching → polish.
+3. **GitHub push:** Initialized git, installed `gh` CLI manually (brew had permission issues), authenticated with a personal access token, resolved merge conflicts, and force-pushed to GitHub.
+4. **Data storage question:** Recommended SQLite for the next decision.
+
+### What I Used
+
+- Streamlit as the UI framework.
+- streamlit-folium for maps (Google Maps API as fallback).
+- Repo live at `https://github.com/NRni/Ross_Ni_Marmaladev`.
+- `gh` CLI installed at `~/bin/gh`.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+Answer the data storage question (JSON vs SQLite vs in-memory vs cloud DB) to continue building.
+
+---
+
+## Entry 13
+
+### Date
+
 ### AI Tool Used
 
 ### What I Asked AI
