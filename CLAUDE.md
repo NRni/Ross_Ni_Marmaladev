@@ -1,0 +1,20 @@
+# AI Usage Log Rule
+
+**Every dialogue turn** in this workspace: **before finishing your reply**, update **AI_Usage_Log.md** at the vault root.
+
+Do **not** skip logging because the exchange seems short or trivial—if you replied to the user, document it (even one bullet each section).
+
+Steps:
+
+1. Open **AI_Usage_Log.md** at the vault root.
+2. **Append `## Entry N`** using the next number after the highest entry. If the bottom entry is only an empty template (headers only), fill **that** entry instead.
+3. Fill **only** these subsections (leave others blank unless the user asks to fill them):
+   - `### Date` — today's date.
+   - `### AI Tool Used` — Claude Code.
+   - `### What I Asked AI` — what the user said / requested **this turn** (bullet or numbered).
+   - `### Why I Asked` — infer briefly where reasonable (otherwise write "Not stated").
+   - `### What AI Gave Me` — what this reply delivered (files, explanations, commands).
+   - `### What I Used` — what the user will likely keep (artifacts / conclusions).
+4. After the filled entry, add an **empty** next **`## Entry …`** block with the same heading scaffold (**Date** through **My Next Step**) if one is not already at the bottom.
+
+If the user says **not** to log this turn, skip logging.

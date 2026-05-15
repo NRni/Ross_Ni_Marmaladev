@@ -1,0 +1,428 @@
+Related: [[Final_Project_PRD]]
+
+## Entry 1
+
+### Date
+
+April 25, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+1. Whether Cursor could be “linked” to my Obsidian vault and how that works.  
+2. To copy `ai_usage_log_template.md` from Downloads into my Obsidian vault.  
+3. To plan Python skills for **Marmaladev** using the details in **Final Project PRD.md**, then to implement that plan (fill the PRD, add a Cursor project skill).  
+4. To record our dialogue in **AI Usage Log.md**, filling only the sections: Date, AI Tool Used, What I Asked AI, Why I Asked, What AI Gave Me, and What I Used.
+
+### Why I Asked
+
+1. I wanted to use Cursor and Obsidian on the same notes without confusion about sync or setup.  
+2. I needed the AI usage template available inside the vault for coursework or reflection.  
+3. I needed the PRD’s empty Python and data sections filled and optional agent guidance for building Marmaladev.  
+4. I needed a concise log of this AI use for transparency or class requirements, without filling every subsection of the template yet.
+
+### What AI Gave Me
+
+1. **Obsidian + Cursor:** Clarified that both apps edit the same folder on disk; opening the vault in Cursor is enough—no separate “link.” Cautions about not editing the same file in both at once without saving.  
+2. **Template:** Created `ai_usage_log_template.md` in the vault root with the same structure as the Downloads file.  
+3. **Marmaladev plan/implementation:** Expanded **Final Project PRD.md** (Python skills bullets, data plan, first tiny step, risks) and added `.cursor/skills/marmaladev/SKILL.md` with product context, build order, and conventions.  
+4. **This log:** Filled the six requested sections in Entry 1 to summarize the thread.
+
+### What I Used
+
+- The explanation that **KingHalliday** is both the Obsidian vault and a valid Cursor workspace.  
+- The **`ai_usage_log_template.md`** file is now in the vault (and this **`AI Usage Log.md`** note).  
+- The updated **`Final Project PRD.md`** and **`marmaladev`** Cursor skill for future coding on Marmaladev.  
+- This **Entry 1** summary as my record of the conversation.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 2
+
+### Date
+
+April 25, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+To make logging AI use a **habit**: after each dialogue, update **AI Usage Log.md** with the same six sections (Date, AI Tool Used, What I Asked AI, Why I Asked, What AI Gave Me, What I Used). Also noted that **today is April 25** (correct the log date).
+
+### Why I Asked
+
+To keep coursework or transparency records consistent without having to remember to ask every time, and to fix the date on the previous entry.
+
+### What AI Gave Me
+
+- Corrected **Entry 1** date to April 25, 2026.  
+- Filled **Entry 2** (this row) for this exchange.  
+- Added a **Cursor project rule** (`.cursor/rules/ai-usage-log.mdc`) so the agent is instructed to append a new log entry at the end of substantive chats in this vault, using those six sections and the user’s stated “today” when they give it.
+
+### What I Used
+
+- **Entry 1** date set to April 25, 2026.  
+- **Entry 2** as the record of this request.  
+- The new **always-apply rule** so future sessions in this workspace should update **AI Usage Log.md** automatically in the agreed format.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 3
+
+### Date
+
+April 25, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+1. Whether I can use **LinkedIn’s API** for Marmaladev (finding or listing game developers).  
+2. To **remember to update the AI usage log** after our dialogue.
+
+### Why I Asked
+
+1. To see if LinkedIn could power discovery or profiles instead of only manual data.  
+2. To keep following the vault habit and the **`.cursor/rules/ai-usage-log.mdc`** rule without prompting every time.
+
+### What AI Gave Me
+
+1. **LinkedIn API:** Explained that **Sign in with LinkedIn** only gives **the signed-in user’s** basic profile—not a directory or “people near me” search. **Storing a LinkedIn profile URL** as a normal link needs **no API**. Broader search/network APIs are **partner-gated** and tightly restricted; **scraping** violates terms. For MVP, **self-entered profiles + optional LinkedIn link + user-provided location** is the realistic approach.  
+2. **This log:** Filled **Entry 3** with those six sections and left a new blank **Entry 4** below.
+
+### What I Used
+
+- The conclusion that Marmaladev should **not** rely on LinkedIn for finding strangers, only optional **login** or a **URL field**.  
+- **Entry 3** as the record of this session and a reminder that logging should continue automatically when work is substantive.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 4
+
+### Date
+
+April 25, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+1. Delete **Welcome.md**.  
+2. **Link the AI Usage Log to the PRD** at the top of the doc (cross-navigation in the vault).
+
+### Why I Asked
+
+To remove the default welcome note and tie project docs together in Obsidian.
+
+### What AI Gave Me
+
+- Removed **Welcome.md** from the vault.  
+- Prepended **`Related: [[AI Usage Log]]`** to **Final Project PRD.md** and **`Related: [[Final Project PRD]]`** to **AI Usage Log.md** so each opens the other from the top of the note.
+
+### What I Used
+
+- Vault without **Welcome.md**.  
+- Bidirectional **Related** wikilinks between the PRD and the AI usage log.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 5
+
+### Date
+
+April 25, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+To record that I am **only allowed to use Python** in the Marmaladev project, and to **update the plan** (PRD and agent skill) if anything implied otherwise.
+
+### Why I Asked
+
+Course rule: implementation must stay in Python, so docs and AI guidance should match.
+
+### What AI Gave Me
+
+- **Final Project PRD.md:** New **Implementation constraint (course rule)** section (Python-only, allowed UI paths, no separate Node/React core; HTTP calls from Python OK). Tweaked **Python Skills → APIs** and **Data Plan → Where data comes from** so wording assumes a Python UI.  
+- **`.cursor/skills/marmaladev/SKILL.md`:** **Hard constraint** block, **Stack (Python only)** with FastAPI/Flask/Streamlit/sqlite3 guidance and explicit “no non-Python frontend framework.”
+
+### What I Used
+
+- Updated PRD and **marmaladev** skill as the single source of truth for the Python-only rule.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 6
+
+### Date
+
+April 25, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+Where to put **Python files** while the project lives in **Obsidian**, and **how to run** the code.
+
+### Why I Asked
+
+To start coding without cluttering the vault and to know the exact terminal commands.
+
+### What AI Gave Me
+
+- Recommendation: keep code in a subfolder **`marmaladev/`** inside the vault (or a sibling folder outside if the course prefers).  
+- Created **`marmaladev/main.py`** (stub) and **`marmaladev/requirements.txt`**.  
+- Run instructions: `cd` into `marmaladev`, optional venv, `python3 main.py`; later `streamlit run app.py` or similar.  
+- Fixed **Related** wikilinks to **`[[AI_Usage_Log]]`** and **`[[Final_Project_PRD]]`** so they match the actual note filenames; updated **`.cursor/rules/ai-usage-log.mdc`** to reference **`AI_Usage_Log.md`**.
+
+### What I Used
+
+- The **`marmaladev/`** folder as the code home; terminal workflow above.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 7
+
+### Date
+
+April 25, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+To clarify **Implementation constraint (course rule)** in the PRD—explain what each **component or plugin** means (**Jinja2**, etc.) because it felt vague.
+
+### Why I Asked
+
+Needed plain-language definitions before choosing a stack.
+
+### What AI Gave Me
+
+- Expanded **Final_Project_PRD.md**: rewrote the short constraint paragraph and added a **table** describing CLI, Streamlit, Tkinter, PySimpleGUI, Flask, FastAPI (+ **Uvicorn**). Added subsection **Extra names that confuse people** for **Jinja2**, **JSON responses** vs thin-page caveat, and **npm / Node / React**.
+
+### What I Used
+
+- The PRD as my glossary when deciding tools.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 8
+
+### Date
+
+April 25, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+`/create-rule` — **every dialogue** should be documented in the AI usage log (project Cursor rule).
+
+### Why I Asked
+
+To tighten logging policy so no exchanges are skipped as “too small.”
+
+### What AI Gave Me
+
+- Rewrote **[.cursor/rules/ai-usage-log.mdc](.cursor/rules/ai-usage-log.mdc)** (`alwaysApply: true`): removed the “substantive only” filter; **every dialogue turn** must append **AI_Usage_Log.md** with the six sections unless the user opts out; minimal entries OK for short chats.
+
+### What I Used
+
+- The updated **`ai-usage-log`** rule as the vault-wide habit.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 9
+
+### Date
+
+May 6, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+Whether I should **open a new folder** (outside the vault) to put **all the code**.
+
+### Why I Asked
+
+Not stated.
+
+### What AI Gave Me
+
+- **Either works.** Keeping code in **`KingHalliday/marmaladev/`** is fine for a class project (notes + code in one Cursor workspace).  
+- **Separate folder** (e.g. `Desktop/Marmaladev/` or `Desktop/KingHalliday-code/`) helps if you want a **clean Obsidian graph**, avoid syncing `.venv`/`__pycache__` with notes, or treat the app as its **own Git repo**.  
+- Use **File → Add Folder to Workspace** (or open two windows) if Obsidian stays in KingHalliday but code lives next door.
+
+### What I Used
+
+- Criteria above to decide split vs single vault folder.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 10
+
+### Date
+
+May 12, 2026
+
+### AI Tool Used
+
+Claude Code
+
+### What I Asked AI
+
+1. Git grab the `grill-me` skill from `https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me` and add it to the project's skills.
+2. Set a rule to always update the AI usage log after every dialogue.
+
+### Why I Asked
+
+1. Wanted to use Matt Pocock's "grill me" skill for stress-testing plans/designs.
+2. To keep the AI usage log habit consistent when using Claude Code (not just Cursor).
+
+### What AI Gave Me
+
+1. Downloaded `SKILL.md` from the GitHub repo and created `.cursor/skills/grill-me/SKILL.md` in the vault.
+2. Created `CLAUDE.md` at the vault root with the same logging rule as `.cursor/rules/ai-usage-log.mdc`, adapted for Claude Code.
+
+### What I Used
+
+- `.cursor/skills/grill-me/SKILL.md` — the "grill me" skill for interviewing/plan stress-testing.
+- `CLAUDE.md` — persistent rule so Claude Code always logs to `AI_Usage_Log.md`.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 11
+
+### Date
+
+May 12, 2026
+
+### AI Tool Used
+
+Claude Code
+
+### What I Asked AI
+
+Update the grill-me skill so each question gives 4 choices (A/B/C/D) with a recommendation, and asks one question at a time.
+
+### Why I Asked
+
+Wanted structured options instead of open-ended grilling — easier to make decisions.
+
+### What AI Gave Me
+
+Updated `.cursor/skills/grill-me/SKILL.md` — each question now presents 4 choices, states a recommendation with reason, and asks one at a time.
+
+### What I Used
+
+- Updated `grill-me` skill with the 4-choice format.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 12
+
+### Date
+
+### AI Tool Used
+
+### What I Asked AI
+
+### Why I Asked
+
+### What AI Gave Me
+
+### What I Used
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
