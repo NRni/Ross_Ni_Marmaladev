@@ -667,6 +667,46 @@ Not stated (likely orientation / understanding the repo before further work).
 
 ### Date
 
+May 15, 2026
+
+### AI Tool Used
+
+Claude Code
+
+### What I Asked AI
+
+Start doing the geocoding.
+
+### Why I Asked
+
+Wanted to add city-to-coordinate conversion so profiles can appear on a map.
+
+### What AI Gave Me
+
+1. `geocode.py` — uses Nominatim (OpenStreetMap, free, no API key) to convert city names to lat/lon.
+2. Added `city`, `lat`, `lon` fields to Profile model and database schema.
+3. City input in profile form — geocodes automatically on save.
+4. **Map tab** using streamlit-folium — shows markers for all profiles with locations, with popup info (name, jobs, city, skills).
+5. Updated profile cards to show city with pin emoji.
+
+### What I Used
+
+- Nominatim geocoding (free, no API key).
+- streamlit-folium map with markers and popups.
+- Three tabs: Browse Profiles, Map, Create/My Profile.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 19
+
+### Date
+
 ### AI Tool Used
 
 ### What I Asked AI
