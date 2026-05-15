@@ -505,6 +505,51 @@ Add map tab with streamlit-folium (step 4 of build plan).
 
 ### Date
 
+May 15, 2026
+
+### AI Tool Used
+
+Claude Code
+
+### What I Asked AI
+
+1. Add full job categories (Game Designer, Game Developer, Game Artist) with sub-specialties as checkboxes.
+2. Replace experience dropdown with a years-of-experience slider.
+3. Fix bug where adding a job category created duplicate profiles before saving.
+
+### Why I Asked
+
+1. Wanted specific, real game industry roles instead of generic "dev/designer/both".
+2. Years of experience is more meaningful than "junior/mid/senior".
+3. Streamlit was saving profiles on every widget interaction, not just on button click.
+
+### What AI Gave Me
+
+1. Updated `models.py` — full job lists (9 designer, 9 developer, 12 artist roles), multi-select via checkboxes.
+2. Updated `app.py` — 3 expandable job sections, slider for years (0–30), save only on button click.
+3. Updated `db.py` — `jobs` column (pipe-separated), `years` column, migration from old schema.
+4. Deleted old database for fresh start.
+
+### What I Used
+
+- Multi-job profile system with all game industry roles.
+- Years slider instead of experience levels.
+- Fixed duplicate profile bug.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+Add map tab with streamlit-folium.
+
+---
+
+## Entry 15
+
+### Date
+
 ### AI Tool Used
 
 ### What I Asked AI
