@@ -59,6 +59,9 @@ class Profile:
     skills: str = ""
     jobs: List[str] = field(default_factory=list)
     years: int = 0
+    city: str = ""
+    lat: Optional[float] = None
+    lon: Optional[float] = None
     id: Optional[int] = None
     links: List[str] = field(default_factory=list)
 

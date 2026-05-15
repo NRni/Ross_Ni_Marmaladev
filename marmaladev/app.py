@@ -4,6 +4,7 @@ from typing import List, Optional
 import streamlit as st
 from db import get_connection, init_db, migrate_db
 from models import Profile, ALL_JOBS, FLAT_JOBS
+from geocode import geocode_city
 
 
 def save_profile(profile: Profile) -> int:
@@ -12,14 +13,14 @@ def save_profile(profile: Profile) -> int:
 
     if profile.id is None:
         cur = conn.execute(
-            "INSERT INTO profiles (email, name, bio, skills, jobs, years) VALUES (?, ?, ?, ?, ?, ?)",
-            (profile.email, profile.name, profile.bio, profile.skills, jobs_str, profile.years),
+            "INSERT INTO profiles (email, name, bio, skills, jobs, years, city, lat, lon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (profile.email, profile.name, profile.bio, profile.skills, jobs_str, profile.years, profile.city, profile.lat, profile.lon),
         )
         profile_id = cur.lastrowid
     else:
         conn.execute(
-            "UPDATE profiles SET name=?, bio=?, skills=?, jobs=?, years=?, updated_at=CURRENT_TIMESTAMP WHERE id=?",
-            (profile.name, profile.bio, profile.skills, jobs_str, profile.years, profile.id),
+            "UPDATE profiles SET name=?, bio=?, skills=?, jobs=?, years=?, city=?, lat=?, lon=?, updated_at=CURRENT_TIMESTAMP WHERE id=?",
+            (profile.name, profile.bio, profile.skills, jobs_str, profile.years, profile.city, profile.lat, profile.lon, profile.id),
         )
         profile_id = profile.id
         conn.execute("DELETE FROM links WHERE profile_id=?", (profile_id,))
@@ -84,7 +85,7 @@ def delete_profile(profile_id: int) -> None:
 
 
 def profile_form(defaults: Optional[dict] = None, key_prefix: str = "create") -> None:
-    """Render the profile form. Returns submitted Profile or None."""
+    """Render the profile form."""
     d = defaults or {}
     default_jobs = d.get("jobs", [])
 
@@ -97,7 +98,6 @@ def profile_form(defaults: Optional[dict] = None, key_prefix: str = "create") ->
         key=f"{key_prefix}_skills",
     )
 
-    # Jobs — grouped by category
     st.markdown("**Jobs** (select all that apply)")
     selected_jobs: List[str] = []
     for category, job_list in ALL_JOBS.items():
@@ -110,6 +110,8 @@ def profile_form(defaults: Optional[dict] = None, key_prefix: str = "create") ->
 
     years = st.slider("Years of experience", min_value=0, max_value=30, value=d.get("years", 0), key=f"{key_prefix}_years")
 
+    city = st.text_input("City", value=d.get("city", ""), placeholder="e.g. Tokyo, New York, London", key=f"{key_prefix}_city")
+
     existing_urls = d.get("urls", [""])
     urls_text = st.text_area(
         "Links (one per line)",
@@ -121,6 +123,23 @@ def profile_form(defaults: Optional[dict] = None, key_prefix: str = "create") ->
     submitted = st.button("Save Profile", type="primary", key=f"{key_prefix}_save")
     if submitted:
         links = [u.strip() for u in urls_text.splitlines() if u.strip()]
+
+        # Geocode city
+        lat, lon = d.get("lat"), d.get("lon")
+        if city.strip():
+            try:
+                coords = geocode_city(city)
+                if coords:
+                    lat, lon = coords
+                else:
+                    st.warning(f"Could not find coordinates for '{city}'. Saving without location.")
+                    lat, lon = None, None
+            except Exception:
+                st.warning("Geocoding service unavailable. Saving without location.")
+                lat, lon = d.get("lat"), d.get("lon")
+        else:
+            lat, lon = None, None
+
         p = Profile(
             email=d.get("email", st.session_state.get("user_email", "")),
             id=d.get("id"),
@@ -129,6 +148,9 @@ def profile_form(defaults: Optional[dict] = None, key_prefix: str = "create") ->
             skills=skills,
             jobs=selected_jobs,
             years=years,
+            city=city.strip(),
+            lat=lat,
+            lon=lon,
             links=links,
         )
         errors = p.validate()
@@ -137,18 +159,19 @@ def profile_form(defaults: Optional[dict] = None, key_prefix: str = "create") ->
                 st.error(e)
         else:
             save_profile(p)
-            st.session_state.pop("just_saved_id", None)
-            st.session_state["just_saved_id"] = p.id if p.id else True
+            st.session_state["just_saved_id"] = True
             st.rerun()
 
 
-def render_profile_card(profile: dict, show_email: bool = False) -> None:
+def render_profile_card(profile: dict) -> None:
     with st.container(border=True):
         st.subheader(profile["name"])
         if profile.get("jobs"):
             st.caption(" · ".join(profile["jobs"]))
         if profile.get("years"):
             st.caption(f"{profile['years']} year{'s' if profile['years'] != 1 else ''} of experience")
+        if profile.get("city"):
+            st.caption(f"📍 {profile['city']}")
         if profile.get("bio"):
             st.write(profile["bio"])
         if profile.get("skills"):
@@ -159,8 +182,43 @@ def render_profile_card(profile: dict, show_email: bool = False) -> None:
                 st.markdown(f"- [{url}]({url})")
 
 
+def render_map(profiles: List[dict]) -> None:
+    """Render a map with profile markers."""
+    import folium
+    from streamlit_folium import st_folium
+
+    located = [p for p in profiles if p.get("lat") is not None and p.get("lon") is not None]
+
+    if not located:
+        st.info("No profiles with locations yet.")
+        return
+
+    # Center map on average of all markers
+    avg_lat = sum(p["lat"] for p in located) / len(located)
+    avg_lon = sum(p["lon"] for p in located) / len(located)
+    m = folium.Map(location=[avg_lat, avg_lon], zoom_start=2)
+
+    for p in located:
+        jobs_str = " · ".join(p.get("jobs", []))
+        popup_lines = [f"<b>{p['name']}</b>"]
+        if jobs_str:
+            popup_lines.append(jobs_str)
+        if p.get("city"):
+            popup_lines.append(f"📍 {p['city']}")
+        if p.get("skills"):
+            popup_lines.append(p["skills"])
+        popup = folium.Popup("<br>".join(popup_lines), max_width=300)
+        folium.Marker(
+            location=[p["lat"], p["lon"]],
+            popup=popup,
+            tooltip=p["name"],
+        ).add_to(m)
+
+    st_folium(m, width=700, height=500)
+
+
 def sign_in_screen() -> None:
-    """Show sign-in form. Returns email or None."""
+    """Show sign-in form."""
     st.title("🎮 Marmaladev")
     st.caption("Find game developers near you")
     st.markdown("---")
@@ -196,20 +254,25 @@ def main():
     st.title("🎮 Marmaladev")
     st.caption(f"Signed in as {email}")
 
-    # Build tabs based on whether user has a profile
+    # Build tabs
     if has_profile:
-        tab_list, tab_edit = st.tabs(["Browse Profiles", "My Profile"])
+        tab_list, tab_map, tab_edit = st.tabs(["Browse Profiles", "Map", "My Profile"])
     else:
-        tab_list, tab_create = st.tabs(["Browse Profiles", "Create Profile"])
+        tab_list, tab_map, tab_create = st.tabs(["Browse Profiles", "Map", "Create Profile"])
+
+    profiles = load_profiles()
 
     with tab_list:
-        profiles = load_profiles()
         if not profiles:
             st.info("No profiles yet. Be the first!")
         else:
             st.header(f"{len(profiles)} Developer{'s' if len(profiles) != 1 else ''}")
             for p in profiles:
                 render_profile_card(p)
+
+    with tab_map:
+        st.header("Developer Map")
+        render_map(profiles)
 
     if has_profile:
         with tab_edit:

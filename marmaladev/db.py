@@ -22,6 +22,9 @@ def init_db() -> None:
             skills      TEXT NOT NULL DEFAULT '',
             jobs        TEXT NOT NULL DEFAULT '',
             years       INTEGER NOT NULL DEFAULT 0,
+            city        TEXT NOT NULL DEFAULT '',
+            lat         REAL,
+            lon         REAL,
             created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
@@ -39,10 +42,16 @@ def init_db() -> None:
 
 
 def migrate_db() -> None:
-    """Add email column if upgrading from old schema."""
+    """Add new columns if upgrading from old schema."""
     conn = get_connection()
     cols = {row[1] for row in conn.execute("PRAGMA table_info(profiles)").fetchall()}
     if "email" not in cols:
         conn.execute("ALTER TABLE profiles ADD COLUMN email TEXT NOT NULL DEFAULT ''")
-        conn.commit()
+    if "city" not in cols:
+        conn.execute("ALTER TABLE profiles ADD COLUMN city TEXT NOT NULL DEFAULT ''")
+    if "lat" not in cols:
+        conn.execute("ALTER TABLE profiles ADD COLUMN lat REAL")
+    if "lon" not in cols:
+        conn.execute("ALTER TABLE profiles ADD COLUMN lon REAL")
+    conn.commit()
     conn.close()

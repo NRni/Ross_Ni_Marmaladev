@@ -631,6 +631,42 @@ Add map tab with streamlit-folium.
 
 ### Date
 
+May 15, 2026
+
+### AI Tool Used
+
+Cursor (Composer)
+
+### What I Asked AI
+
+- Read though the project.
+
+### Why I Asked
+
+Not stated (likely orientation / understanding the repo before further work).
+
+### What AI Gave Me
+
+- Walkthrough of visible layout: Obsidian vault root, `Final_Project_PRD.md`, `marmaladev/` Streamlit + SQLite app, `.cursor` rules/skills, `AI_Usage_Log.md`.
+- Summary of Marmaladev: PRD goals (local game-dev matching), Python-only constraint, MVP (profiles, location, links).
+- Summary of current code: `app.py` (email gate, browse/create/edit/delete, job taxonomies, links), `models.py` (`Profile` + validation), `db.py` (SQLite schema + email migration), `main.py` stub, `requirements.txt` (Streamlit + Folium stack; map UI not wired in app yet).
+
+### What I Used
+
+- High-level map of the repo and what is implemented vs. still planned (e.g. map tab per prior log).
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 18
+
+### Date
+
 ### AI Tool Used
 
 ### What I Asked AI
