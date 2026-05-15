@@ -587,6 +587,50 @@ Add map tab with streamlit-folium.
 
 ### Date
 
+May 15, 2026
+
+### AI Tool Used
+
+Claude Code
+
+### What I Asked AI
+
+1. Clear the Create form after saving — only edit via Edit tab.
+2. Add email sign-in, only show Create Profile on first visit, hide it after profile exists.
+
+### Why I Asked
+
+1. Wanted clean separation: Create for first-time, Edit for changes.
+2. Each user should be identified by email, and only create a profile once.
+
+### What AI Gave Me
+
+1. Create tab clears after save with "Profile saved!" message.
+2. Email sign-in gate — users enter email to access the app.
+3. If no profile exists for that email → Browse + Create tabs.
+4. If profile exists → Browse + My Profile (edit/delete) tabs. Create tab hidden.
+5. Updated `models.py` (email field), `db.py` (email column, unique constraint), `app.py` (sign-in flow, `load_profile_by_email`).
+
+### What I Used
+
+- Email-based sign-in flow.
+- Conditional tabs based on profile existence.
+- Old database deleted for fresh schema.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+Add map tab with streamlit-folium.
+
+---
+
+## Entry 17
+
+### Date
+
 ### AI Tool Used
 
 ### What I Asked AI
