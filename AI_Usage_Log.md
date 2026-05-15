@@ -457,6 +457,54 @@ Answer the data storage question (JSON vs SQLite vs in-memory vs cloud DB) to co
 
 ### Date
 
+May 15, 2026
+
+### AI Tool Used
+
+Claude Code
+
+### What I Asked AI
+
+1. Continue grill-me questions (data storage, location, profile fields, links, discovery, profile management, code structure, nearby matching).
+2. Start building the Marmaladev MVP.
+
+### Why I Asked
+
+1. To make structured design decisions before coding.
+2. Ready to implement after completing the grill-me session.
+
+### What AI Gave Me
+
+1. **Grill-me decisions:** SQLite, city+geocoding (deferred), standard profile fields, free-form URLs, list+map discovery, single-user local, split-by-feature structure, skip nearby matching for MVP.
+2. **MVP code:**
+   - `db.py` — SQLite schema (profiles + links tables), WAL mode.
+   - `models.py` — Profile dataclass with validation (name required, role/experience enums, URL check).
+   - `app.py` — Streamlit UI with 3 tabs: Browse Profiles, Create Profile, Edit/Delete.
+   - `requirements.txt` — streamlit, streamlit-folium, folium.
+3. Fixed Python 3.8 compatibility (`int | None` → `Optional[int]`, added `from __future__ import annotations`).
+4. Verified Streamlit runs at `http://localhost:8501`.
+5. Pushed to GitHub.
+
+### What I Used
+
+- Working MVP with profile CRUD in Streamlit.
+- SQLite database (`marmaladev.db` created on first run).
+- Code pushed to `https://github.com/NRni/Ross_Ni_Marmaladev`.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+Add map tab with streamlit-folium (step 4 of build plan).
+
+---
+
+## Entry 14
+
+### Date
+
 ### AI Tool Used
 
 ### What I Asked AI
