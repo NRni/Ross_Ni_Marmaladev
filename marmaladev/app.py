@@ -155,13 +155,8 @@ def main():
 
     with tab_create:
         if "just_saved_id" in st.session_state:
-            pid = st.session_state.pop("just_saved_id")
-            saved = load_profile(pid)
-            if saved:
-                st.success("Profile saved!")
-                render_profile_card(saved)
-                st.markdown("---")
-                st.caption("Fill the form below to create another profile.")
+            st.session_state.pop("just_saved_id")
+            st.success("Profile saved! Go to Edit / Delete tab to make changes.")
         st.header("Create Your Profile")
         profile_form(key_prefix="create")
 
