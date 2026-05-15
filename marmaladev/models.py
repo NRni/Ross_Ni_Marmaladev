@@ -53,6 +53,7 @@ FLAT_JOBS = [j for group in ALL_JOBS.values() for j in group]
 
 @dataclass
 class Profile:
+    email: str
     name: str
     bio: str = ""
     skills: str = ""
@@ -63,6 +64,8 @@ class Profile:
 
     def validate(self) -> List[str]:
         errors = []
+        if not self.email.strip() or "@" not in self.email:
+            errors.append("A valid email is required.")
         if not self.name.strip():
             errors.append("Name is required.")
         if not self.jobs:

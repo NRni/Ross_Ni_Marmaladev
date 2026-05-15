@@ -12,8 +12,8 @@ def save_profile(profile: Profile) -> int:
 
     if profile.id is None:
         cur = conn.execute(
-            "INSERT INTO profiles (name, bio, skills, jobs, years) VALUES (?, ?, ?, ?, ?)",
-            (profile.name, profile.bio, profile.skills, jobs_str, profile.years),
+            "INSERT INTO profiles (email, name, bio, skills, jobs, years) VALUES (?, ?, ?, ?, ?, ?)",
+            (profile.email, profile.name, profile.bio, profile.skills, jobs_str, profile.years),
         )
         profile_id = cur.lastrowid
     else:
@@ -55,6 +55,20 @@ def load_profile(profile_id: int) -> Optional[dict]:
         conn.close()
         return None
     links = conn.execute("SELECT url FROM links WHERE profile_id=?", (profile_id,)).fetchall()
+    d = dict(row)
+    d["urls"] = [l["url"] for l in links]
+    d["jobs"] = [j for j in d["jobs"].split("|") if j]
+    conn.close()
+    return d
+
+
+def load_profile_by_email(email: str) -> Optional[dict]:
+    conn = get_connection()
+    row = conn.execute("SELECT * FROM profiles WHERE email=?", (email,)).fetchone()
+    if row is None:
+        conn.close()
+        return None
+    links = conn.execute("SELECT url FROM links WHERE profile_id=?", (row["id"],)).fetchall()
     d = dict(row)
     d["urls"] = [l["url"] for l in links]
     d["jobs"] = [j for j in d["jobs"].split("|") if j]
@@ -108,6 +122,7 @@ def profile_form(defaults: Optional[dict] = None, key_prefix: str = "create") ->
     if submitted:
         links = [u.strip() for u in urls_text.splitlines() if u.strip()]
         p = Profile(
+            email=d.get("email", st.session_state.get("user_email", "")),
             id=d.get("id"),
             name=name,
             bio=bio,
@@ -121,26 +136,42 @@ def profile_form(defaults: Optional[dict] = None, key_prefix: str = "create") ->
             for e in errors:
                 st.error(e)
         else:
-            pid = save_profile(p)
-            st.session_state["just_saved_id"] = pid
+            save_profile(p)
+            st.session_state.pop("just_saved_id", None)
+            st.session_state["just_saved_id"] = p.id if p.id else True
             st.rerun()
 
 
-def render_profile_card(profile: dict) -> None:
+def render_profile_card(profile: dict, show_email: bool = False) -> None:
     with st.container(border=True):
         st.subheader(profile["name"])
-        if profile["jobs"]:
+        if profile.get("jobs"):
             st.caption(" · ".join(profile["jobs"]))
-        if profile["years"]:
+        if profile.get("years"):
             st.caption(f"{profile['years']} year{'s' if profile['years'] != 1 else ''} of experience")
-        if profile["bio"]:
+        if profile.get("bio"):
             st.write(profile["bio"])
-        if profile["skills"]:
+        if profile.get("skills"):
             skills = [s.strip() for s in profile["skills"].split(",") if s.strip()]
             st.write(" ".join(f"`{s}`" for s in skills))
-        if profile["urls"]:
+        if profile.get("urls"):
             for url in profile["urls"]:
                 st.markdown(f"- [{url}]({url})")
+
+
+def sign_in_screen() -> None:
+    """Show sign-in form. Returns email or None."""
+    st.title("🎮 Marmaladev")
+    st.caption("Find game developers near you")
+    st.markdown("---")
+    st.header("Sign In")
+    email = st.text_input("Enter your email to continue", placeholder="you@example.com", key="signin_email")
+    if st.button("Continue", type="primary", key="signin_btn"):
+        if not email.strip() or "@" not in email:
+            st.error("Please enter a valid email.")
+        else:
+            st.session_state["user_email"] = email.strip().lower()
+            st.rerun()
 
 
 def main():
@@ -148,44 +179,51 @@ def main():
     init_db()
     migrate_db()
 
+    # Sign-in gate
+    if "user_email" not in st.session_state:
+        sign_in_screen()
+        return
+
+    email = st.session_state["user_email"]
+    existing = load_profile_by_email(email)
+    has_profile = existing is not None
+
+    # Show saved confirmation once
+    if "just_saved_id" in st.session_state:
+        st.session_state.pop("just_saved_id")
+        st.success("Profile saved!")
+
     st.title("🎮 Marmaladev")
-    st.caption("Find game developers near you")
+    st.caption(f"Signed in as {email}")
 
-    tab_list, tab_create, tab_edit = st.tabs(["Browse Profiles", "Create Profile", "Edit / Delete"])
-
-    with tab_create:
-        if "just_saved_id" in st.session_state:
-            st.session_state.pop("just_saved_id")
-            st.success("Profile saved! Go to Edit / Delete tab to make changes.")
-        st.header("Create Your Profile")
-        profile_form(key_prefix="create")
+    # Build tabs based on whether user has a profile
+    if has_profile:
+        tab_list, tab_edit = st.tabs(["Browse Profiles", "My Profile"])
+    else:
+        tab_list, tab_create = st.tabs(["Browse Profiles", "Create Profile"])
 
     with tab_list:
         profiles = load_profiles()
         if not profiles:
-            st.info("No profiles yet. Create one to get started!")
+            st.info("No profiles yet. Be the first!")
         else:
             st.header(f"{len(profiles)} Developer{'s' if len(profiles) != 1 else ''}")
             for p in profiles:
                 render_profile_card(p)
 
-    with tab_edit:
-        profiles = load_profiles()
-        if not profiles:
-            st.info("No profiles to edit.")
-        else:
-            options = {f"{p['name']} (#{p['id']})": p["id"] for p in profiles}
-            selected = st.selectbox("Select profile to edit", list(options.keys()), key="edit_select")
-            pid = options[selected]
-            profile = load_profile(pid)
-            if profile:
-                st.header(f"Edit: {profile['name']}")
-                profile_form(defaults=profile, key_prefix="edit")
-                st.divider()
-                if st.button("Delete Profile", key="delete_btn"):
-                    delete_profile(pid)
-                    st.warning("Profile deleted.")
-                    st.rerun()
+    if has_profile:
+        with tab_edit:
+            st.header(f"Edit: {existing['name']}")
+            profile_form(defaults=existing, key_prefix="edit")
+            st.divider()
+            if st.button("Delete Profile", key="delete_btn"):
+                delete_profile(existing["id"])
+                st.warning("Profile deleted.")
+                st.rerun()
+    else:
+        with tab_create:
+            st.header("Create Your Profile")
+            profile_form(defaults={"email": email}, key_prefix="create")
 
 
 if __name__ == "__main__":

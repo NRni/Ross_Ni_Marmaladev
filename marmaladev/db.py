@@ -16,6 +16,7 @@ def init_db() -> None:
     conn.executescript("""
         CREATE TABLE IF NOT EXISTS profiles (
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
+            email       TEXT NOT NULL UNIQUE,
             name        TEXT NOT NULL,
             bio         TEXT NOT NULL DEFAULT '',
             skills      TEXT NOT NULL DEFAULT '',
@@ -38,12 +39,10 @@ def init_db() -> None:
 
 
 def migrate_db() -> None:
-    """Add jobs/years columns if upgrading from old schema."""
+    """Add email column if upgrading from old schema."""
     conn = get_connection()
     cols = {row[1] for row in conn.execute("PRAGMA table_info(profiles)").fetchall()}
-    if "role" in cols and "jobs" not in cols:
-        conn.execute("ALTER TABLE profiles ADD COLUMN jobs TEXT NOT NULL DEFAULT ''")
-        conn.execute("ALTER TABLE profiles ADD COLUMN years INTEGER NOT NULL DEFAULT 0")
-        conn.execute("UPDATE profiles SET jobs = role")
+    if "email" not in cols:
+        conn.execute("ALTER TABLE profiles ADD COLUMN email TEXT NOT NULL DEFAULT ''")
         conn.commit()
     conn.close()
