@@ -550,6 +550,43 @@ Add map tab with streamlit-folium.
 
 ### Date
 
+May 15, 2026
+
+### AI Tool Used
+
+Claude Code
+
+### What I Asked AI
+
+After saving a new profile in the Create tab, the saved profile should be visible there (not just cleared), and it should appear in the Edit/Delete tab.
+
+### Why I Asked
+
+Wanted to see confirmation of what was just saved, and have immediate access to edit it.
+
+### What AI Gave Me
+
+Updated `app.py` to use `st.session_state["just_saved_id"]` — after saving, the Create tab shows the saved profile card at the top with a success message, then a blank form below for creating another. Profile also appears in Edit/Delete tab.
+
+### What I Used
+
+- Saved profile visible in Create tab after submission.
+- Profile immediately available in Edit/Delete tab.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+Add map tab with streamlit-folium.
+
+---
+
+## Entry 16
+
+### Date
+
 ### AI Tool Used
 
 ### What I Asked AI
