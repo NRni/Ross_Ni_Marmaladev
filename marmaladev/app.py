@@ -1,23 +1,25 @@
 from __future__ import annotations
-from typing import Optional
+from typing import List, Optional
 
 import streamlit as st
-from db import get_connection, init_db
-from models import Profile, ROLES, EXPERIENCE_LEVELS
+from db import get_connection, init_db, migrate_db
+from models import Profile, ALL_JOBS, FLAT_JOBS
 
 
 def save_profile(profile: Profile) -> int:
     conn = get_connection()
+    jobs_str = "|".join(profile.jobs)
+
     if profile.id is None:
         cur = conn.execute(
-            "INSERT INTO profiles (name, bio, skills, role, experience) VALUES (?, ?, ?, ?, ?)",
-            (profile.name, profile.bio, profile.skills, profile.role, profile.experience),
+            "INSERT INTO profiles (name, bio, skills, jobs, years) VALUES (?, ?, ?, ?, ?)",
+            (profile.name, profile.bio, profile.skills, jobs_str, profile.years),
         )
         profile_id = cur.lastrowid
     else:
         conn.execute(
-            "UPDATE profiles SET name=?, bio=?, skills=?, role=?, experience=?, updated_at=CURRENT_TIMESTAMP WHERE id=?",
-            (profile.name, profile.bio, profile.skills, profile.role, profile.experience, profile.id),
+            "UPDATE profiles SET name=?, bio=?, skills=?, jobs=?, years=?, updated_at=CURRENT_TIMESTAMP WHERE id=?",
+            (profile.name, profile.bio, profile.skills, jobs_str, profile.years, profile.id),
         )
         profile_id = profile.id
         conn.execute("DELETE FROM links WHERE profile_id=?", (profile_id,))
@@ -32,13 +34,16 @@ def save_profile(profile: Profile) -> int:
     return profile_id
 
 
-def load_profiles() -> list[dict]:
+def load_profiles() -> List[dict]:
     conn = get_connection()
     rows = conn.execute("SELECT * FROM profiles ORDER BY updated_at DESC").fetchall()
     profiles = []
     for row in rows:
         links = conn.execute("SELECT url FROM links WHERE profile_id=?", (row["id"],)).fetchall()
-        profiles.append({**dict(row), "urls": [l["url"] for l in links]})
+        d = dict(row)
+        d["urls"] = [l["url"] for l in links]
+        d["jobs"] = [j for j in d["jobs"].split("|") if j]
+        profiles.append(d)
     conn.close()
     return profiles
 
@@ -50,8 +55,11 @@ def load_profile(profile_id: int) -> Optional[dict]:
         conn.close()
         return None
     links = conn.execute("SELECT url FROM links WHERE profile_id=?", (profile_id,)).fetchall()
+    d = dict(row)
+    d["urls"] = [l["url"] for l in links]
+    d["jobs"] = [j for j in d["jobs"].split("|") if j]
     conn.close()
-    return {**dict(row), "urls": [l["url"] for l in links]}
+    return d
 
 
 def delete_profile(profile_id: int) -> None:
@@ -61,49 +69,70 @@ def delete_profile(profile_id: int) -> None:
     conn.close()
 
 
-def profile_form(profile: Optional[dict] = None) -> Optional[Profile]:
-    defaults = profile or {}
-    name = st.text_input("Display Name", value=defaults.get("name", ""))
-    bio = st.text_area("Bio", value=defaults.get("bio", ""), max_chars=500)
-    skills = st.text_input("Skills (comma-separated)", value=defaults.get("skills", ""), placeholder="Unity, pixel art, C#")
+def profile_form(defaults: Optional[dict] = None, key_prefix: str = "create") -> None:
+    """Render the profile form. Returns submitted Profile or None."""
+    d = defaults or {}
+    default_jobs = d.get("jobs", [])
 
-    col1, col2 = st.columns(2)
-    with col1:
-        role = st.selectbox("Role", ROLES, index=ROLES.index(defaults.get("role", "dev")))
-    with col2:
-        experience = st.selectbox("Experience", EXPERIENCE_LEVELS, index=EXPERIENCE_LEVELS.index(defaults.get("experience", "junior")))
+    name = st.text_input("Display Name", value=d.get("name", ""), key=f"{key_prefix}_name")
+    bio = st.text_area("Bio", value=d.get("bio", ""), max_chars=500, key=f"{key_prefix}_bio")
+    skills = st.text_input(
+        "Skills (comma-separated)",
+        value=d.get("skills", ""),
+        placeholder="Unity, pixel art, C#",
+        key=f"{key_prefix}_skills",
+    )
 
-    existing_urls = defaults.get("urls", [""])
+    # Jobs — grouped by category
+    st.markdown("**Jobs** (select all that apply)")
+    selected_jobs: List[str] = []
+    for category, job_list in ALL_JOBS.items():
+        with st.expander(f"🎮 {category}" if "Designer" in category else
+                         f"💻 {category}" if "Developer" in category else
+                         f"🎨 {category}"):
+            for job in job_list:
+                if st.checkbox(job, value=job in default_jobs, key=f"{key_prefix}_job_{job}"):
+                    selected_jobs.append(job)
+
+    years = st.slider("Years of experience", min_value=0, max_value=30, value=d.get("years", 0), key=f"{key_prefix}_years")
+
+    existing_urls = d.get("urls", [""])
     urls_text = st.text_area(
         "Links (one per line)",
         value="\n".join(existing_urls),
         placeholder="https://github.com/you\nhttps://your-portfolio.com",
+        key=f"{key_prefix}_urls",
     )
-    links = [u.strip() for u in urls_text.splitlines() if u.strip()]
 
-    if st.button("Save Profile", type="primary"):
+    submitted = st.button("Save Profile", type="primary", key=f"{key_prefix}_save")
+    if submitted:
+        links = [u.strip() for u in urls_text.splitlines() if u.strip()]
         p = Profile(
-            id=defaults.get("id"),
+            id=d.get("id"),
             name=name,
             bio=bio,
             skills=skills,
-            role=role,
-            experience=experience,
+            jobs=selected_jobs,
+            years=years,
             links=links,
         )
         errors = p.validate()
         if errors:
             for e in errors:
                 st.error(e)
-            return None
-        return p
-    return None
+        else:
+            save_profile(p)
+            st.success(f"Profile saved for {p.name}!")
+            st.rerun()
 
 
 def render_profile_card(profile: dict) -> None:
     with st.container(border=True):
         st.subheader(profile["name"])
-        st.caption(f"{profile['role'].title()} · {profile['experience'].title()}")
+        if profile["jobs"]:
+            st.caption(" · ".join(profile["jobs"]))
+        if profile["years"]:
+            st.caption(f"{profile['years']} year{'s' if profile['years'] != 1 else ''} of experience")
         if profile["bio"]:
             st.write(profile["bio"])
         if profile["skills"]:
@@ -117,6 +146,7 @@ def render_profile_card(profile: dict) -> None:
 def main():
     st.set_page_config(page_title="Marmaladev", page_icon="🎮", layout="wide")
     init_db()
+    migrate_db()
 
     st.title("🎮 Marmaladev")
     st.caption("Find game developers near you")
@@ -125,11 +155,7 @@ def main():
 
     with tab_create:
         st.header("Create Your Profile")
-        profile = profile_form()
-        if profile:
-            save_profile(profile)
-            st.success(f"Profile saved for {profile.name}!")
-            st.rerun()
+        profile_form(key_prefix="create")
 
     with tab_list:
         profiles = load_profiles()
@@ -146,18 +172,14 @@ def main():
             st.info("No profiles to edit.")
         else:
             options = {f"{p['name']} (#{p['id']})": p["id"] for p in profiles}
-            selected = st.selectbox("Select profile to edit", list(options.keys()))
+            selected = st.selectbox("Select profile to edit", list(options.keys()), key="edit_select")
             pid = options[selected]
             profile = load_profile(pid)
             if profile:
                 st.header(f"Edit: {profile['name']}")
-                updated = profile_form(profile)
-                if updated:
-                    save_profile(updated)
-                    st.success("Profile updated!")
-                    st.rerun()
+                profile_form(defaults=profile, key_prefix="edit")
                 st.divider()
-                if st.button("Delete Profile", type="secondary"):
+                if st.button("Delete Profile", key="delete_btn"):
                     delete_profile(pid)
                     st.warning("Profile deleted.")
                     st.rerun()
