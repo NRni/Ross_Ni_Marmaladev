@@ -184,8 +184,7 @@ def render_profile_card(profile: dict) -> None:
 
 def render_map(profiles: List[dict]) -> None:
     """Render a map with profile markers."""
-    import folium
-    from streamlit_folium import st_folium
+    import pandas as pd
 
     located = [p for p in profiles if p.get("lat") is not None and p.get("lon") is not None]
 
@@ -193,28 +192,16 @@ def render_map(profiles: List[dict]) -> None:
         st.info("No profiles with locations yet.")
         return
 
-    # Center map on average of all markers
-    avg_lat = sum(p["lat"] for p in located) / len(located)
-    avg_lon = sum(p["lon"] for p in located) / len(located)
-    m = folium.Map(location=[avg_lat, avg_lon], zoom_start=2)
+    df = pd.DataFrame([
+        {"lat": p["lat"], "lon": p["lon"], "name": p["name"]}
+        for p in located
+    ])
 
+    st.map(df, zoom=2, size=20)
+
+    # Show profile list below the map
     for p in located:
-        jobs_str = " · ".join(p.get("jobs", []))
-        popup_lines = [f"<b>{p['name']}</b>"]
-        if jobs_str:
-            popup_lines.append(jobs_str)
-        if p.get("city"):
-            popup_lines.append(f"📍 {p['city']}")
-        if p.get("skills"):
-            popup_lines.append(p["skills"])
-        popup = folium.Popup("<br>".join(popup_lines), max_width=300)
-        folium.Marker(
-            location=[p["lat"], p["lon"]],
-            popup=popup,
-            tooltip=p["name"],
-        ).add_to(m)
-
-    st_folium(m, width=700, height=500)
+        st.markdown(f"**{p['name']}** — 📍 {p.get('city', '')} · {' · '.join(p.get('jobs', []))}")
 
 
 def sign_in_screen() -> None:
