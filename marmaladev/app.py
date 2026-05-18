@@ -110,7 +110,32 @@ def profile_form(defaults: Optional[dict] = None, key_prefix: str = "create") ->
 
     years = st.slider("Years of experience", min_value=0, max_value=30, value=d.get("years", 0), key=f"{key_prefix}_years")
 
-    city = st.text_input("City", value=d.get("city", ""), placeholder="e.g. Tokyo, New York, London", key=f"{key_prefix}_city")
+    # Location — select from list or type custom
+    from geocode import CITY_COORDS
+    city_options = sorted([c.title() for c in CITY_COORDS.keys()])
+    city_options.insert(0, "")
+
+    default_city = d.get("city", "")
+    if default_city and default_city.title() not in city_options:
+        city_options.insert(1, default_city)
+
+    col_loc1, col_loc2 = st.columns([2, 1])
+    with col_loc1:
+        selected_city = st.selectbox(
+            "Select your city",
+            city_options,
+            index=city_options.index(default_city.title()) if default_city.title() in city_options else 0,
+            key=f"{key_prefix}_city_select",
+        )
+    with col_loc2:
+        custom_city = st.text_input(
+            "Or type address",
+            value="" if selected_city else default_city,
+            placeholder="e.g. 123 Main St, Tokyo",
+            key=f"{key_prefix}_city_custom",
+        )
+
+    city = custom_city.strip() if custom_city.strip() else selected_city
 
     existing_urls = d.get("urls", [""])
     urls_text = st.text_area(

@@ -1,7 +1,7 @@
 from typing import Optional, Tuple
 import requests
 
-# Fallback coordinates for common game dev cities
+# Major game dev cities with coordinates
 CITY_COORDS = {
     "new york": (40.7128, -74.0060),
     "los angeles": (34.0522, -118.2437),
@@ -81,7 +81,11 @@ CITY_COORDS = {
 
 
 def geocode_city(city: str) -> Optional[Tuple[float, float]]:
-    """Convert a city name to (lat, lon). Returns None if not found."""
+    """Convert a city or address to (lat, lon).
+
+    Tries local city lookup first (instant), then Nominatim for
+    street addresses or cities not in the local list.
+    """
     if not city.strip():
         return None
 
@@ -90,11 +94,11 @@ def geocode_city(city: str) -> Optional[Tuple[float, float]]:
     if key in CITY_COORDS:
         return CITY_COORDS[key]
 
-    # Try Nominatim as fallback
+    # Try Nominatim for street addresses or unknown cities
     try:
         resp = requests.get(
             "https://nominatim.openstreetmap.org/search",
-            params={"q": city, "format": "json", "limit": 1},
+            params={"q": city, "format": "json", "limit": 1, "addressdetails": 1},
             headers={"User-Agent": "Marmaladev/1.0"},
             timeout=5,
         )
