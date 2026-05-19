@@ -707,6 +707,405 @@ Wanted to add city-to-coordinate conversion so profiles can appear on a map.
 
 ### Date
 
+May 19, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Read my files and make the UI cooler, mostly purple, with more animation, using Python only.
+
+### Why I Asked
+
+Wanted the Marmaladev app to feel more polished and visually engaging while staying within the Python-only course constraint.
+
+### What AI Gave Me
+
+- Read project files and confirmed the UI is Streamlit in `marmaladev/app.py`.
+- Implemented a purple visual overhaul directly in Python via injected Streamlit CSS.
+- Added animation effects (hero glow, profile card entrance, button hover lift, and tab polish).
+- Upgraded profile cards into custom styled HTML blocks with skill pills and improved link styling.
+- Preserved existing core flows (sign-in, tabs, create/edit/delete) and added celebratory UX feedback.
+- Ran lints and compile checks to confirm `app.py` is valid.
+
+### What I Used
+
+- Updated `marmaladev/app.py` with a purple animated UI theme.
+- Python-only approach aligned with class rules.
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 20
+
+### Date
+
+May 19, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- How to see what changed, and whether there is a localhost to view it.
+
+### Why I Asked
+
+Needed a practical way to inspect code edits and preview the UI update.
+
+### What AI Gave Me
+
+- Clear commands to inspect diffs (`git diff`, targeted file diff) and run the app locally with Streamlit.
+- Clarified that the app runs on the user's localhost and where to open it in the browser.
+
+### What I Used
+
+- Local verification workflow: diff first, then run and view UI changes on localhost.
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 21
+
+### Date
+
+May 19, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Whether the font can be changed, and if a font file upload is needed.
+
+### Why I Asked
+
+Wanted to further improve the look-and-feel of the Marmaladev UI typography.
+
+### What AI Gave Me
+
+- Updated `marmaladev/app.py` to apply a modern font stack globally through the existing Streamlit CSS theme.
+- Clarified that no upload is required for built-in/system fonts, while custom font files are only needed for a specific branded typeface.
+- Validated the change with compile and lint checks.
+
+### What I Used
+
+- Global UI font update using a clean sans-serif stack in the app theme.
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 22
+
+### Date
+
+May 19, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Read my files and change the font because I downloaded fonts.
+
+### Why I Asked
+
+Wanted to apply a specific downloaded typeface to the app UI.
+
+### What AI Gave Me
+
+- Searched the workspace and found the downloaded font file at `Honk/Honk-Regular-VariableFont_MORF,SHLN.ttf`.
+- Updated `marmaladev/app.py` to load that local font with embedded `@font-face` (base64 data URL) and apply it as the first-choice app font.
+- Fixed a CSS string formatting issue during implementation and re-validated the file.
+- Confirmed the updated app compiles and has no linter errors.
+
+### What I Used
+
+- Local custom font integrated into the Streamlit theme from the downloaded `.ttf` file.
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 23
+
+### Date
+
+May 19, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Ensure the font changes apply to every text element in the project, not just a limited part.
+
+### Why I Asked
+
+The previous font update appeared partial, so a full app-wide typography override was needed.
+
+### What AI Gave Me
+
+- Updated `marmaladev/app.py` CSS selectors to enforce the custom font across all common Streamlit text surfaces (markdown, captions, labels, inputs, textareas, tabs, buttons, widgets, and BaseWeb elements).
+- Kept the downloaded local font (`Honk`) as first priority in the stack.
+- Re-ran compile and lint checks with no errors.
+
+### What I Used
+
+- Full app-wide font enforcement for all visible text in the Streamlit UI.
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 24
+
+### Date
+
+May 19, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Make only titles and big text use Honk, and make small text use Cutive Mono.
+
+### Why I Asked
+
+Wanted a cleaner typography hierarchy: expressive display font for emphasis and a readable mono font for regular content.
+
+### What AI Gave Me
+
+- Found `Cutive_Mono/CutiveMono-Regular.ttf` in the workspace.
+- Updated `marmaladev/app.py` to embed both local fonts (`HonkLocal` and `CutiveMonoLocal`) with `@font-face`.
+- Set app-wide/body and small text to `CutiveMonoLocal`.
+- Scoped `HonkLocal` specifically to titles and larger display elements (headings, hero title, profile names, tab labels, expander summaries, emphasized alert text).
+- Re-ran compile and lint checks with no issues.
+
+### What I Used
+
+- Two-font UI system: Honk for large/display text and Cutive Mono for normal/small text.
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 25
+
+### Date
+
+May 19, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Change the animation for Browse Profiles, Map, and My Profile tabs because the UI feels weird.
+
+### Why I Asked
+
+The current tab motion and styling felt off and needed smoother, cleaner interactions.
+
+### What AI Gave Me
+
+- Updated tab-specific CSS in `marmaladev/app.py` to reduce awkward movement and improve visual clarity.
+- Removed Honk from tab labels to avoid distorted-looking navigation text.
+- Restyled tab container and active/hover states with softer transitions and less jumpiness.
+- Added subtle `tabpanel` fade-in animation for smoother content switching.
+- Re-ran compile and lint checks with no errors.
+
+### What I Used
+
+- Cleaner navigation feel for Browse Profiles / Map / My Profile tabs with refined animations.
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 26
+
+### Date
+
+May 19, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Create a Cursor rule to always "grill me" for each prompt.
+
+### Why I Asked
+
+Wanted persistent, structured challenge questions on every request.
+
+### What AI Gave Me
+
+- Added `.cursor/rules/always-grill-me.mdc` as an always-apply rule.
+- Configured the rule to ask one challenge question per prompt, provide 4 options (A/B/C/D), include a recommendation, and ask one question at a time.
+- Included response style guidance and a concrete example in the rule.
+
+### What I Used
+
+- New always-on Cursor rule for "grill me" behavior in this workspace.
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 27
+
+### Date
+
+May 19, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Use Nabla for titles and Kings for normal text.
+
+### Why I Asked
+
+Wanted a new visual hierarchy with a stylized title font and a separate body font.
+
+### What AI Gave Me
+
+- Found local font files `Nabla/Nabla-Regular-VariableFont_EDPT,EHLT.ttf` and `Kings/Kings-Regular.ttf`.
+- Updated `marmaladev/app.py` to embed both fonts via `@font-face`.
+- Mapped titles/display text to `NablaLocal` and normal/body UI text to `KingsLocal`.
+- Kept existing theme/animations and verified compile + lint checks pass.
+
+### What I Used
+
+- New typography mapping: Nabla for headings and Kings for regular text in the app.
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 28
+
+### Date
+
+May 19, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Keep Marmaladev title text special, but set other titles to Amatic SC and small text to Ubuntu.
+
+### Why I Asked
+
+Wanted finer typography control across headings vs body text while preserving the brand title style.
+
+### What AI Gave Me
+
+- Found local `Amatic SC` and `Ubuntu` font files in the workspace.
+- Updated `marmaladev/app.py` to embed `Amatic SC` (regular + bold) and `Ubuntu` (regular) with `@font-face`.
+- Mapped fonts so:
+  - `Marmaladev` hero title uses `Nabla`
+  - other title elements use `Amatic SC`
+  - normal/small text uses `Ubuntu`
+- Kept existing styling and confirmed compile + lint checks pass.
+
+### What I Used
+
+- Final typography split: Nabla for Marmaladev title, Amatic SC for other titles, Ubuntu for body/small text.
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 29
+
+### Date
+
+May 19, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Treat section labels like "2 Developers", "Developer Map", and "Edit: Nicole" as titles, and change title font to Abril Fatface while setting small text to Montserrat.
+
+### Why I Asked
+
+Wanted the heading hierarchy to be visually consistent and easier to read with preferred fonts.
+
+### What AI Gave Me
+
+- Found local font files `Abril_Fatface/AbrilFatface-Regular.ttf` and `Montserrat/Montserrat-VariableFont_wght.ttf`.
+- Updated `marmaladev/app.py` font embedding to use `AbrilLocal` for title-style elements and `MontserratLocal` for normal/small text.
+- Kept the `Marmaladev` hero title special (still Nabla as previously requested).
+- Verified the app compiles and lint checks are clean.
+
+### What I Used
+
+- Updated typography mapping: Abril Fatface for titles and Montserrat for body/small text.
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 30
+
+### Date
+
 ### AI Tool Used
 
 ### What I Asked AI
