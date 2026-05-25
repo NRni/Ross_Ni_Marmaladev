@@ -1326,6 +1326,47 @@ The Streamlit Deploy control remained clipped or off-screen after prior layout f
 
 ### Date
 
+May 25, 2026
+
+### AI Tool Used
+
+Claude Code
+
+### What I Asked AI
+
+Read the project and create bullet points for a 7-slide presentation using the required template (Title, Problem, Solution, Key Features, Technical Details, Demo, Reflection).
+
+### Why I Asked
+
+Need to prepare a class presentation for the Marmaladev final project.
+
+### What AI Gave Me
+
+Created `Presentation_Bullet_Points.md` with detailed bullet points for all 7 slides:
+- Title slide with project name
+- Problem statement targeting indie game devs finding teammates
+- Solution overview of the Marmaladev app
+- 3 key features: Profile System, Geocoded Map, Browse & Edit
+- Technical details: data structures, libraries (Streamlit, SQLite, geopy), code organization
+- Demo placeholder with suggested flow
+- Reflection with challenges, learnings, and future additions
+
+### What I Used
+
+- `Presentation_Bullet_Points.md` — ready to transfer to slide template.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 37
+
+### Date
+
 ### AI Tool Used
 
 ### What I Asked AI
