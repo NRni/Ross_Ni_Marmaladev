@@ -1106,6 +1106,226 @@ Wanted the heading hierarchy to be visually consistent and easier to read with p
 
 ### Date
 
+May 23, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Add more animation to the Marmaladev UI.
+
+### Why I Asked
+
+Wanted the app to feel more dynamic and polished beyond the existing purple theme.
+
+### What AI Gave Me
+
+- Expanded animations in `marmaladev/app.py`: drifting background, floating purple orbs, hero float, title reveal, staggered profile cards, card hover lift/glow, skill pill pop, link slide, button press/hover, input focus glow, expander/alert/map fade-in, and reduced-motion fallback.
+- Added staggered card entrance via `card_index` in `render_profile_card`.
+- Verified compile and lint checks pass.
+
+### What I Used
+
+- Richer motion layer across the Streamlit UI while keeping readability.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 31
+
+### Date
+
+May 23, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Center the Browse Profiles / Map / My Profile UI, make it bigger, and improve tab toggle animation.
+
+### Why I Asked
+
+The tab section felt off-center, too small, and the tab switching animation needed polish.
+
+### What AI Gave Me
+
+- Updated `marmaladev/app.py` CSS to center the main tab area and content with max-width constraints.
+- Increased sizes for hero, section titles, profile cards, map, and form widgets inside tabs.
+- Reworked tab toggle styling into a sliding purple pill highlight with smoother cubic-bezier transitions and tab panel switch animation.
+- Verified compile and lint checks pass.
+
+### What I Used
+
+- Centered, larger tab UI with improved toggle animation for Browse / Map / My Profile.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 32
+
+### Date
+
+May 23, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Help — I can't open the app.
+
+### Why I Asked
+
+The Streamlit UI was not loading in the browser as expected.
+
+### What AI Gave Me
+
+- Checked the running terminal and found Streamlit is serving on `http://localhost:8502` (not the default 8501).
+- Verified both ports 8501 and 8502 respond, and `app.py` imports fine in the user's conda environment.
+- Provided clear steps to open the correct URL, restart Streamlit cleanly, and troubleshoot if the browser still fails.
+
+### What I Used
+
+- Correct localhost URL and restart commands to open Marmaladev.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 33
+
+### Date
+
+May 23, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Localhost loads but shows only blur with no text.
+
+### Why I Asked
+
+The app appeared broken in the browser despite Streamlit running.
+
+### What AI Gave Me
+
+- Diagnosed likely CSS layering issue: blurred decorative orbs (`::before`/`::after`) were painting over UI content.
+- Fixed stacking in `marmaladev/app.py` by pushing content layers above background (`z-index`), lowering orb opacity, and using lighter Montserrat regular font file to reduce load time.
+- Provided restart/refresh steps to verify the fix.
+
+### What I Used
+
+- Layering fix so text and controls render above the purple blur background.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 34
+
+### Date
+
+May 23, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Stop centering all text; lay boxes left-to-right; fix Deploy button cut off screen.
+
+### Why I Asked
+
+Previous centering/layout changes made the UI hard to use and clipped the Streamlit Deploy control.
+
+### What AI Gave Me
+
+- Removed global text centering for headings, captions, profile cards, and tab form widgets.
+- Switched Browse Profiles cards to a 2-column left-to-right grid using `st.columns`.
+- Left-aligned profile card content and widened main layout.
+- Removed `overflow-x: hidden` and adjusted header/toolbar CSS so Deploy button stays visible.
+- Verified `app.py` compiles cleanly.
+
+### What I Used
+
+- Left-aligned layout with horizontal profile card rows and visible top-right Deploy button.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 35
+
+### Date
+
+May 23, 2026
+
+### AI Tool Used
+
+Cursor (Composer / AI assistant in the editor)
+
+### What I Asked AI
+
+- Deploy button still not on screen — please fit it in the viewport.
+
+### Why I Asked
+
+The Streamlit Deploy control remained clipped or off-screen after prior layout fixes.
+
+### What AI Gave Me
+
+- Reworked header/toolbar CSS in `marmaladev/app.py`: fixed header bar to top of viewport, constrained app width to `100vw`, and aligned toolbar actions to the right with safe padding.
+- Added top padding to main content so it does not sit under the fixed header.
+- Prevented custom button transforms from affecting header/deploy controls.
+- Verified compile check passes.
+
+### What I Used
+
+- Fixed top header layout so Deploy stays visible inside the screen.
+
+### What I Changed or Rejected
+
+### What I Still Do Not Fully Understand
+
+### My Next Step
+
+---
+
+## Entry 36
+
+### Date
+
 ### AI Tool Used
 
 ### What I Asked AI

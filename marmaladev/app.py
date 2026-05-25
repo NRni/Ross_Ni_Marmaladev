@@ -114,7 +114,9 @@ def apply_purple_theme() -> None:
             font-display: swap;
           }}
         """
-    montserrat_path = Path(__file__).resolve().parents[1] / "Montserrat" / "Montserrat-VariableFont_wght.ttf"
+    montserrat_path = Path(__file__).resolve().parents[1] / "Montserrat" / "static" / "Montserrat-Regular.ttf"
+    if not montserrat_path.exists():
+        montserrat_path = Path(__file__).resolve().parents[1] / "Montserrat" / "Montserrat-VariableFont_wght.ttf"
     if montserrat_path.exists():
         montserrat_data = base64.b64encode(montserrat_path.read_bytes()).decode("ascii")
         font_css += f"""
@@ -133,8 +135,137 @@ def apply_purple_theme() -> None:
 
           .stApp {
             background: radial-gradient(circle at 20% 20%, #31124b 0%, #180926 40%, #10071a 100%);
+            background-size: 140% 140%;
+            animation: bgShift 18s ease-in-out infinite;
             color: #f5eeff;
             font-family: "MontserratLocal", "Montserrat", "Avenir Next", "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            position: relative;
+            isolation: isolate;
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: clip;
+          }
+
+          html, body {
+            max-width: 100vw;
+            overflow-x: clip;
+          }
+
+          .stApp::before,
+          .stApp::after {
+            content: "";
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(40px);
+            opacity: 0.22;
+          }
+
+          .stApp::before {
+            width: 280px;
+            height: 280px;
+            top: 8%;
+            left: -80px;
+            background: rgba(170, 98, 255, 0.45);
+            animation: orbFloatA 14s ease-in-out infinite;
+          }
+
+          .stApp::after {
+            width: 320px;
+            height: 320px;
+            bottom: 6%;
+            right: -100px;
+            background: rgba(120, 60, 200, 0.38);
+            animation: orbFloatB 16s ease-in-out infinite;
+          }
+
+          .main .block-container {
+            position: relative;
+            z-index: 2;
+            padding-top: 1.6rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          section.main,
+          [data-testid="stAppViewContainer"],
+          [data-testid="stAppViewBlockContainer"],
+          [data-testid="stMainBlockContainer"] {
+            position: relative;
+            z-index: 2;
+            max-width: 100%;
+          }
+
+          header[data-testid="stHeader"] {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+            box-sizing: border-box !important;
+            background: rgba(16, 7, 26, 0.88) !important;
+            backdrop-filter: blur(8px);
+            z-index: 999999 !important;
+            overflow: visible !important;
+            padding: 0.45rem 0.75rem 0.45rem 0.75rem !important;
+            display: flex !important;
+            justify-content: flex-end !important;
+            align-items: center !important;
+            pointer-events: none;
+          }
+
+          header[data-testid="stHeader"] * {
+            pointer-events: auto;
+          }
+
+          [data-testid="stToolbar"] {
+            position: relative !important;
+            right: 0 !important;
+            top: 0 !important;
+            margin: 0 !important;
+            padding: 0 0.25rem 0 0 !important;
+            max-width: calc(100vw - 1.5rem) !important;
+            width: auto !important;
+            overflow: visible !important;
+            z-index: 999999 !important;
+            flex-shrink: 0 !important;
+          }
+
+          [data-testid="stToolbarActions"],
+          [data-testid="stToolbarActions"] > div {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+            flex-wrap: nowrap !important;
+            gap: 0.35rem !important;
+            max-width: 100% !important;
+          }
+
+          [data-testid="stDecoration"] {
+            overflow: visible !important;
+            position: static !important;
+          }
+
+          section.main {
+            padding-top: 3.75rem !important;
+          }
+
+          [data-testid="stToolbar"] button,
+          [data-testid="stToolbarActions"] button,
+          [data-testid="baseButton-header"],
+          [data-testid="stBaseButton-headerNoPadding"] {
+            transform: none !important;
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+          }
+
+          label, input, textarea, button, p, span, h1, h2, h3, h4, h5, h6 {
+            color: #f5eeff;
           }
 
           *, *::before, *::after,
@@ -171,18 +302,21 @@ def apply_purple_theme() -> None:
             font-family: "NablaLocal", "AbrilLocal", "MontserratLocal", "Montserrat", "Avenir Next", "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif !important;
           }
 
-          [data-testid="stHeader"] {
-            background: transparent;
-          }
-
           h1, h2, h3 {
             color: #f7eaff !important;
             letter-spacing: 0.2px;
             font-size-adjust: 0.55;
+            animation: titleReveal 520ms ease-out both;
+            text-align: left;
           }
 
-          .main .block-container {
-            padding-top: 1.6rem;
+          h2 {
+            font-size: 2rem !important;
+            margin-bottom: 1rem !important;
+          }
+
+          h3 {
+            font-size: 1.45rem !important;
           }
 
           [data-testid="stMarkdownContainer"] p,
@@ -190,10 +324,41 @@ def apply_purple_theme() -> None:
             color: #d9c9f6;
           }
 
+          @keyframes bgShift {
+            0%, 100% { background-position: 0% 40%; }
+            50% { background-position: 100% 60%; }
+          }
+
+          @keyframes orbFloatA {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, 24px) scale(1.08); }
+          }
+
+          @keyframes orbFloatB {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-36px, -20px) scale(1.06); }
+          }
+
           @keyframes pulseGlow {
             0% { box-shadow: 0 0 0 rgba(170, 98, 255, 0.30); }
             50% { box-shadow: 0 0 24px rgba(170, 98, 255, 0.45); }
             100% { box-shadow: 0 0 0 rgba(170, 98, 255, 0.30); }
+          }
+
+          @keyframes heroFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+          }
+
+          @keyframes titleReveal {
+            from {
+              opacity: 0;
+              transform: translateY(10px) scale(0.98);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0) scale(1);
+            }
           }
 
           @keyframes slideFadeUp {
@@ -207,48 +372,69 @@ def apply_purple_theme() -> None:
             }
           }
 
+          @keyframes pillPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+            100% { transform: scale(1); }
+          }
+
           .hero-banner {
             border: 1px solid rgba(186, 122, 255, 0.45);
             background: linear-gradient(130deg, rgba(94, 34, 153, 0.55), rgba(49, 18, 75, 0.60));
             border-radius: 18px;
-            padding: 1rem 1.2rem;
-            margin-bottom: 0.9rem;
+            padding: 1.35rem 1.5rem;
+            margin-bottom: 1.1rem;
             animation: pulseGlow 7s ease-in-out infinite;
+            text-align: center;
           }
 
           .hero-title {
-            font-size: 1.45rem;
+            font-size: 2rem;
             font-weight: 700;
             color: #f8eeff;
             margin: 0;
+            animation: heroFloat 4.5s ease-in-out infinite;
           }
 
           .hero-subtitle {
-            font-size: 0.96rem;
+            font-size: 1.08rem;
             color: #d9c9f6;
-            margin-top: 0.25rem;
+            margin-top: 0.35rem;
+            animation: slideFadeUp 600ms ease-out 120ms both;
           }
 
           .profile-card {
             border: 1px solid rgba(186, 122, 255, 0.35);
             background: linear-gradient(160deg, rgba(43, 15, 69, 0.75), rgba(29, 11, 46, 0.76));
-            border-radius: 16px;
-            padding: 1rem 1.1rem;
-            margin-bottom: 0.8rem;
-            animation: slideFadeUp 420ms ease-out;
+            border-radius: 18px;
+            padding: 1.35rem 1.45rem;
+            margin: 0 0 1rem 0;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            animation: slideFadeUp 480ms ease-out both;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+          }
+
+          .profile-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            border-color: rgba(208, 161, 255, 0.55);
+            box-shadow: 0 12px 28px rgba(120, 60, 200, 0.28);
           }
 
           .profile-name {
             color: #f8eeff;
-            font-size: 1.15rem;
+            font-size: 1.35rem;
             font-weight: 700;
-            margin: 0 0 0.25rem 0;
+            margin: 0 0 0.35rem 0;
+            text-align: left;
           }
 
           .meta-line {
             color: #d8c4f9;
-            font-size: 0.92rem;
-            margin-bottom: 0.15rem;
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+            text-align: left;
           }
 
           .skill-pill {
@@ -257,9 +443,16 @@ def apply_purple_theme() -> None:
             background: rgba(128, 64, 210, 0.24);
             color: #f0dcff;
             border-radius: 999px;
-            padding: 0.2rem 0.5rem;
-            margin: 0.2rem 0.26rem 0 0;
-            font-size: 0.8rem;
+            padding: 0.28rem 0.62rem;
+            margin: 0.24rem 0.3rem 0 0;
+            font-size: 0.92rem;
+            transition: transform 0.18s ease, background-color 0.18s ease;
+          }
+
+          .skill-pill:hover {
+            transform: translateY(-2px) scale(1.04);
+            background: rgba(148, 78, 230, 0.36);
+            animation: pillPop 320ms ease;
           }
 
           .link-list {
@@ -270,62 +463,114 @@ def apply_purple_theme() -> None:
           .link-list a {
             color: #dba8ff !important;
             text-decoration: none;
+            transition: color 0.18s ease, transform 0.18s ease;
+            display: inline-block;
           }
 
           .link-list a:hover {
             color: #efcaff !important;
             text-decoration: underline;
+            transform: translateX(3px);
           }
 
           .stButton > button {
             border: 1px solid rgba(196, 140, 255, 0.55) !important;
             background: linear-gradient(140deg, #7f3fd6, #5d2c96) !important;
             color: #fff6ff !important;
-            transition: transform 0.18s ease, box-shadow 0.2s ease;
+            transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease;
           }
 
           .stButton > button:hover {
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.02);
             box-shadow: 0 8px 18px rgba(153, 84, 230, 0.35);
+            filter: brightness(1.06);
+          }
+
+          .stButton > button:active {
+            transform: translateY(0) scale(0.98);
+          }
+
+          [data-testid="stTabs"] {
+            max-width: 100%;
+            margin: 0.5rem 0 0 0;
           }
 
           [data-baseweb="tab-list"] {
-            gap: 0.35rem;
-            background: rgba(55, 22, 86, 0.42);
-            border: 1px solid rgba(186, 122, 255, 0.25);
-            border-radius: 12px;
-            padding: 0.24rem;
+            gap: 0.45rem;
+            background: rgba(55, 22, 86, 0.55);
+            border: 1px solid rgba(186, 122, 255, 0.32);
+            border-radius: 16px;
+            padding: 0.38rem;
+            justify-content: center;
+            position: relative;
+            min-height: 3.4rem;
           }
 
           [data-baseweb="tab"] {
             background: transparent;
-            border-radius: 9px;
+            border-radius: 12px;
             border: 1px solid transparent;
             color: #d9c9f6 !important;
-            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+            flex: 1 1 0;
+            min-width: 150px;
+            padding: 0.72rem 1.1rem !important;
+            font-size: 1.06rem !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.2px;
+            position: relative;
+            z-index: 2;
+            transition: color 0.28s ease, transform 0.22s cubic-bezier(0.34, 1.2, 0.64, 1);
             font-family: "MontserratLocal", "Montserrat", "Avenir Next", "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif !important;
           }
 
           [data-baseweb="tab"]:hover {
-            background: rgba(139, 79, 210, 0.24);
-            border-color: rgba(186, 122, 255, 0.28);
-            color: #f1deff !important;
-            transform: translateY(-1px);
+            color: #f6e8ff !important;
+            transform: translateY(-1px) scale(1.02);
           }
 
           [data-baseweb="tab-highlight"] {
-            background: transparent !important;
+            background: linear-gradient(135deg, rgba(176, 108, 255, 0.95), rgba(126, 63, 214, 0.95)) !important;
+            border-radius: 12px !important;
+            height: calc(100% - 10px) !important;
+            top: 5px !important;
+            box-shadow: 0 8px 20px rgba(140, 74, 230, 0.42);
+            transition: transform 0.38s cubic-bezier(0.34, 1.35, 0.64, 1),
+                        width 0.38s cubic-bezier(0.34, 1.35, 0.64, 1),
+                        left 0.38s cubic-bezier(0.34, 1.35, 0.64, 1) !important;
           }
 
           button[aria-selected="true"][role="tab"] {
-            background: rgba(158, 93, 233, 0.34) !important;
-            border-color: rgba(208, 161, 255, 0.55) !important;
-            color: #fff2ff !important;
-            box-shadow: 0 0 0 1px rgba(208, 161, 255, 0.18);
+            background: transparent !important;
+            border-color: transparent !important;
+            color: #fff8ff !important;
+            box-shadow: none !important;
+            transform: scale(1.03);
+          }
+
+          button[aria-selected="false"][role="tab"] {
+            opacity: 0.88;
           }
 
           [role="tabpanel"] {
-            animation: tabFadeIn 220ms ease-out;
+            animation: tabSwitchIn 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+            max-width: 100%;
+            margin: 1.2rem 0 0 0;
+            padding: 0.4rem 0 1rem 0;
+          }
+
+          [data-testid="stCaptionContainer"] {
+            text-align: left;
+          }
+
+          @keyframes tabSwitchIn {
+            from {
+              opacity: 0;
+              transform: translateY(10px) scale(0.985);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0) scale(1);
+            }
           }
 
           @keyframes tabFadeIn {
@@ -344,6 +589,68 @@ def apply_purple_theme() -> None:
             background: rgba(31, 13, 48, 0.75) !important;
             border: 1px solid rgba(186, 122, 255, 0.30) !important;
             color: #f9ecff !important;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+          }
+
+          .stTextInput > div > div > input:focus,
+          .stTextArea textarea:focus {
+            border-color: rgba(208, 161, 255, 0.65) !important;
+            box-shadow: 0 0 0 3px rgba(170, 98, 255, 0.22) !important;
+            transform: translateY(-1px);
+          }
+
+          [data-testid="stExpander"] {
+            animation: slideFadeUp 420ms ease-out both;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+          }
+
+          [data-testid="stExpander"]:hover {
+            box-shadow: 0 6px 16px rgba(120, 60, 200, 0.18);
+          }
+
+          [data-testid="stAlertContainer"] {
+            animation: slideFadeUp 380ms ease-out both;
+          }
+
+          [data-testid="stMap"] {
+            animation: slideFadeUp 520ms ease-out both;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(186, 122, 255, 0.28);
+            width: 100%;
+            min-height: 420px;
+          }
+
+          [data-testid="stMap"] iframe {
+            min-height: 420px;
+          }
+
+          .profile-card p {
+            text-align: left;
+            font-size: 1rem;
+          }
+
+          .profile-card .link-list {
+            text-align: left;
+            margin-left: 1rem;
+            margin-right: 0;
+          }
+
+          .profile-card > div {
+            text-align: left;
+          }
+
+          [data-testid="stTabs"] label,
+          [data-testid="stTabs"] [data-testid="stMarkdownContainer"] p {
+            font-size: 1.02rem;
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+              animation-duration: 0.01ms !important;
+              animation-iteration-count: 1 !important;
+              transition-duration: 0.01ms !important;
+            }
           }
         </style>
         """
@@ -469,7 +776,7 @@ def profile_form(defaults: Optional[dict] = None, key_prefix: str = "create") ->
             st.rerun()
 
 
-def render_profile_card(profile: dict) -> None:
+def render_profile_card(profile: dict, card_index: int = 0) -> None:
     jobs = profile.get("jobs", [])
     jobs_line = " · ".join(html.escape(job) for job in jobs)
     years = profile.get("years")
@@ -487,9 +794,11 @@ def render_profile_card(profile: dict) -> None:
     if years:
         years_line = f"{years} year{'s' if years != 1 else ''} of experience"
 
+    delay_ms = min(card_index * 90, 540)
+
     st.markdown(
         f"""
-        <div class="profile-card">
+        <div class="profile-card" style="animation-delay: {delay_ms}ms;">
           <p class="profile-name">{html.escape(profile.get("name", ""))}</p>
           {f'<p class="meta-line">{jobs_line}</p>' if jobs_line else ''}
           {f'<p class="meta-line">{years_line}</p>' if years_line else ''}
@@ -575,8 +884,14 @@ def main():
             st.info("No profiles yet. Be the first!")
         else:
             st.header(f"{len(profiles)} Developer{'s' if len(profiles) != 1 else ''}")
-            for p in profiles:
-                render_profile_card(p)
+            cols_per_row = 2
+            for row_start in range(0, len(profiles), cols_per_row):
+                cols = st.columns(cols_per_row)
+                for col_idx, col in enumerate(cols):
+                    profile_idx = row_start + col_idx
+                    if profile_idx < len(profiles):
+                        with col:
+                            render_profile_card(profiles[profile_idx], card_index=profile_idx)
 
     with tab_map:
         st.header("Developer Map")
